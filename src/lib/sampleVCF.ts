@@ -1,0 +1,16 @@
+export const SAMPLE_VCF_CONTENT = `##fileformat=VCFv4.2
+##fileDate=20260219
+##source=PharmaGuard_Sample
+##INFO=<ID=GENE,Number=1,Type=String,Description="Gene symbol">
+##INFO=<ID=STAR,Number=.,Type=String,Description="Star allele designation">
+##INFO=<ID=RS,Number=1,Type=String,Description="dbSNP ID">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\tPATIENT_DEMO
+chr22\t42128945\trs3892097\tC\tT\t100\tPASS\tGENE=CYP2D6;STAR=*4;RS=rs3892097\tGT\t0/1
+chr22\t42126611\trs16947\tG\tA\t100\tPASS\tGENE=CYP2D6;STAR=*2;RS=rs16947\tGT\t0/1
+chr10\t96541616\trs4244285\tG\tA\t100\tPASS\tGENE=CYP2C19;STAR=*2;RS=rs4244285\tGT\t1/1
+chr10\t96522463\trs12248560\tC\tT\t100\tPASS\tGENE=CYP2C19;STAR=*17;RS=rs12248560\tGT\t0/1
+chr10\t96702047\trs1799853\tC\tT\t100\tPASS\tGENE=CYP2C9;STAR=*2;RS=rs1799853\tGT\t0/1
+chr12\t21331549\trs4149056\tT\tC\t100\tPASS\tGENE=SLCO1B1;STAR=*5;RS=rs4149056\tGT\t0/1
+chr6\t18139228\trs1142345\tA\tG\t100\tPASS\tGENE=TPMT;STAR=*3C;RS=rs1142345\tGT\t0/1
+chr1\t97915614\trs3918290\tC\tT\t100\tPASS\tGENE=DPYD;STAR=*2A;RS=rs3918290\tGT\t0/1`;
