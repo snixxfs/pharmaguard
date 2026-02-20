@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 server/.env
+.env.*
+server/.env.*
 .env
 .env.local
 
@@ -25,3 +27,5 @@ server/.env
 *.njsproj
 *.sln
 *.sw?
+.DS_Store
+*.log
