@@ -161,5 +161,5 @@ MIT License — see the LICENSE file if provided. Otherwise, consider this proje
 
 ## Credits
 
-- Built by Team PharmaGuard for hackathon/demo use.
-- Thanks to CPIC for publicly available PGx guidance and to OSS libraries that power this project.
+- Built by Team Phoneix from RV UNIVERSITY
+
