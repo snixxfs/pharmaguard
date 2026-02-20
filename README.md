@@ -1,73 +1,165 @@
-# Welcome to your Lovable project
+# PharmaGuard 🛡️
 
-## Project info
+Educational only — Not medical advice.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+[![Vite](https://img.shields.io/badge/Vite-5.x-646CFF.svg?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-18-149ECA.svg?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Deploy on Vercel](https://img.shields.io/badge/Deploy-Vercel-000.svg?logo=vercel&logoColor=white)](https://vercel.com/)
 
-## How can I edit this code?
+Hackathon‑grade pharmacogenomics (PGx) tool that validates a VCF, maps variants → phenotypes, and outputs CPIC‑aligned guidance with evidence traceability — plus an optional LLM Copilot (server‑side env key only).
 
-There are several ways of editing your application.
+---
 
-**Use Lovable**
+## What It Does
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+- Upload VCF v4.2 and validate with clear, human‑friendly errors.
+- Deterministic PGx analysis (no randomness): variant parsing → phenotype mapping → risk labels per drug.
+- CPIC‑aligned recommendations and dosage guidance (when available in‑app).
+- Export JSON results (download + copy‑to‑clipboard).
+- History of runs to compare, re‑open, download, or delete.
+- Knowledge section: offline reference for supported genes and drugs.
+- Optional Copilot: grounded explanations using the current run context; server‑side AI key only.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## Supported Coverage
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+| Genes     | Drugs         |
+|-----------|---------------|
+| CYP2D6    | Codeine       |
+| CYP2C19   | Clopidogrel   |
+| CYP2C9    | Warfarin      |
+| SLCO1B1   | Simvastatin   |
+| TPMT      | Azathioprine  |
+| DPYD      | Fluorouracil  |
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## Key Features
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- VCF validation before processing (size hints, graceful missing annotations, useful errors).
+- Evidence traceability: surfaces rsIDs when available.
+- Schema‑safe output using Zod validation.
+- Download JSON + Copy JSON actions.
+- Optional Copilot and AI “detect‑meds” endpoints (server‑side only; no keys in client).
+- HashRouter for SPA‑friendly static hosting.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Tech Stack
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+- Frontend: React + TypeScript + Vite
+- UI: Tailwind, shadcn/ui, lucide‑react, framer‑motion
+- Charts: Recharts
+- Validation: Zod
+- Routing: HashRouter (static hosting friendly)
+
+---
+
+## Architecture Overview
+
+```
+Upload VCF
+   ↓ (VCF v4.2 validation)
+Deterministic PGx Engine
+   ↓
+Zod Schema Validation → Results UI → Export JSON (download / copy)
+
+Optional:
+Copilot / Detect‑meds → /api/ai/* (serverless) → LLM Provider (Gemini / OpenAI)
+```
+
+---
+
+## Local Setup
+
+Prereqs:
+- Node 18+ (recommended LTS)
+
+Install:
+
+```bash
+npm install
+```
+
+Dev (prints local URL; use hash routes like `#/analyze`):
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Build:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+npm run build
+```
 
-**Use GitHub Codespaces**
+Preview (serves the built app):
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```bash
+npm run preview
+```
 
-## What technologies are used for this project?
+Common gotcha:
+- If “Go Live” / Live Server shows a directory listing, you opened the wrong folder. For static hosting, serve the built `dist` folder or use `npm run preview`. The actual app is at the Vite/preview URL (hash routes such as `#/analyze`).
 
-This project is built with:
+---
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## AI Setup (Optional)
 
-## How can I deploy this project?
+Keys must be server‑side only. Never store API keys in the client.
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Environment variables:
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+# Use one provider (Gemini recommended) – set on the server only
+GEMINI_API_KEY=your_key_here
+# Optional alternative if supported in your deployment
+OPENAI_API_KEY=your_key_here
+```
 
-Yes, you can!
+Local verification:
+- Start the app and visit `/api/ai/ping` → should return `{ "ok": true }` when the key is configured correctly.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Notes:
+- Copilot and detect‑meds use relative server routes: `/api/ai/ping`, `/api/ai/chat`, `/api/ai/detect-meds`.
+- In production (Vercel), these run as serverless functions.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
+
+## Deployment (Vercel)
+
+1. Push the repository to GitHub (app lives at repo root).
+2. Import the repo in Vercel.
+3. In Vercel → Project Settings → Environment Variables, set:
+   - `GEMINI_API_KEY` (or `OPENAI_API_KEY`)
+4. Build command: `npm run build`
+5. Output directory: `dist`
+6. Routing:
+   - The app uses HashRouter (`#/route`) so client‑side navigation works on static hosts.
+   - A SPA rewrite is included for future BrowserRouter migration.
+7. Verify:
+   - Visit `/api/ai/ping` → `{ "ok": true }` when the env key is set.
+   - UI loads at your Vercel URL with hash routes (e.g., `/#/analyze`).
+
+---
+
+## Safety & Disclaimer
+
+- Educational/demo only. Not medical advice.
+- Not a substitute for clinical tools or clinician judgment.
+- Always consult qualified professionals for patient care decisions.
+
+---
+
+## License
+
+MIT License — see the LICENSE file if provided. Otherwise, consider this project MIT for hackathon/demo use.
+
+---
+
+## Credits
+
+- Built by Team PharmaGuard for hackathon/demo use.
+- Thanks to CPIC for publicly available PGx guidance and to OSS libraries that power this project.
